@@ -1,6 +1,7 @@
 import os
 import shutil
 from generate_page import generate_pages_recursive
+import sys
 
 def main():
     # Write a recursive function that copies all the contents from a source directory to a destination directory (in our case, static to public)
@@ -8,9 +9,10 @@ def main():
     # It should copy all files and subdirectories, nested files, etc.
     # I recommend logging the path of each file you copy, so you can see what's happening as you run and debug your code.
     # no shutil.copytree() allowed, you must write the recursive function yourself using os and shutil modules.
-    
+    # in main.py use the sys.argv to grab the first CLI argument to the program. Save it as the basepath. If one isn't provided, default to /
+    basepath = sys.argv[1] if len(sys.argv) > 1 else "/"
     source_dir = "static"
-    dest_dir = "public"
+    dest_dir = "docs"
     # Delete all contents of the destination directory
     if os.path.exists(dest_dir):
         shutil.rmtree(dest_dir)
@@ -28,9 +30,9 @@ def main():
                 print(f"Copied: {src_item} to {dst_item}")
     # Start copying from source to destination
     copy_contents(source_dir, dest_dir)
-
+    # pass the basepath to the generate_pages_recursive and generate_page functions
     # after copying files from static to public, it should generate a page from content using template.html and write it to public.
-    generate_pages_recursive("content", "template.html", "public")
+    generate_pages_recursive("content", "template.html", "docs", basepath)
 
 
 if __name__ == "__main__":
